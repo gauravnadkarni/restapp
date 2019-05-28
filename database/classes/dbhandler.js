@@ -1,8 +1,8 @@
 module.exports = class AbstractDBHandler {
-    constructor(server, username, password, database) {
+    constructor(host, username, password, database) {
         this.dbdriver = null;
         this.connection = null;
-        this.server = server;
+        this.host = host;
         this.username = username;
         this.password = password;
         this.database = database;

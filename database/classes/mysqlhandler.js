@@ -2,8 +2,8 @@ const AbstractDBHandler = require('./dbhandler');
 const Sequelize = require('sequelize');
 
 class MySqlHandler extends AbstractDBHandler {
-    constructor(server, username, password, database) {
-        super(server, username, password, database);
+    constructor(host, username, password, database) {
+        super(host, username, password, database);
         this.dbdriver = 'mysql';
     }
 
@@ -11,8 +11,8 @@ class MySqlHandler extends AbstractDBHandler {
         let sequelize = null;
         if (this.connection === null) {
             sequelize = new Sequelize('database', 'username', 'password', {
-                host: this.server,
-                dialect: 'mysql'
+                host: this.host,
+                dialect: this.dbdriver
             });
             this.connection = sequelize;
         }
