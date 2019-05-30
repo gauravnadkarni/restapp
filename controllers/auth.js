@@ -4,14 +4,18 @@ const uuidv4 = require('uuid/v4');
 const {RefreshTokens} = require('../database/models');
 const sequelize = require('sequelize'); 
 const {User} = require('../database/models');
+const { validationResult } = require('express-validator/check');
 
 module.exports = {
     login : function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         passport.authenticate('local', {session: false}, (err, user, info) => {
             if (err || !user) {
                 return res.status(400).json({
-                    message: 'Something is not right',
-                    user   : user
+                    message: info.message,
                 });
             }
            req.login(user, {session: false}, (err) => {
@@ -28,6 +32,10 @@ module.exports = {
         })(req, res);
     },
     refreshToken : function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         RefreshTokens.findOne({ where : {refreshToken : req.body.refreshToken,expiresIn:{[sequelize.Op.gte]: Math.floor(new Date() / 1000)}}}).then(token => {
             if (!token) {
                 throw new Error('invalid token error');

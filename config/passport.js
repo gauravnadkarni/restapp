@@ -16,7 +16,7 @@ passport.use(new LocalStrategy({
         return User.findOne({ where : {email : email}})
             .then(user => {
                 if (!user) {
-                    return cb(null, false, { message: 'Incorrect email or password.' });
+                    return cb(null, false, { message: 'Incorrect email supplied.' });
                 }
                 bcrypt.compare(password, user.get("password"), function(err, res) {
                     if(res) {

@@ -1,9 +1,15 @@
 const bcrypt = require('bcrypt');
 const {User} = require('../database/models');
+const { validationResult } = require('express-validator/check');
 
 container = {};
 
 container.register = function(req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    
     let {firstName,lastName,email,password} = req.body;
     bcrypt.hash(password, 10, function(err, hash) {
       User.create({firstName : firstName, lastName : lastName,email : email, password : hash}).then((user) => {
