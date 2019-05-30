@@ -20,8 +20,7 @@ passport.use(new LocalStrategy({
                 }
                 bcrypt.compare(password, user.get("password"), function(err, res) {
                     if(res) {
-                        let data = {"sub" : user.get('email')}
-                        return cb(null, data, { message: 'Logged In Successfully' });
+                        return cb(null, user, { message: 'Logged In Successfully' });
                     } else {
                         return cb(null, false, { message: 'Incorrect password.' });
                     } 
