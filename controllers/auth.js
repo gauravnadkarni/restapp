@@ -1,10 +1,11 @@
-const jwt = require('jsonwebtoken');
+
 const passport = require("passport");
-const uuidv4 = require('uuid/v4');
+
 const {RefreshTokens} = require('../database/models');
 const sequelize = require('sequelize'); 
 const {User} = require('../database/models');
 const { validationResult } = require('express-validator/check');
+const AuthHandler = require('../core/auth');
 
 module.exports = {
     login : function (req, res, next) {
@@ -22,12 +23,13 @@ module.exports = {
                if (err) {
                    res.send(err);
                }
+
                // generate a signed json web token with the contents of user object and return it in the response
-               const expiresIn = (Math.floor(new Date() / 1000)+300);
-               const accessToken = jwt.sign({sub : user.get('email')}, 'your_jwt_secret',{jwtid : uuidv4(),issuer : 'UGC Agent', expiresIn:expiresIn});
-               const refreshToken = uuidv4();
-               RefreshTokens.create({userId:user.get('id'),refreshToken:refreshToken,expiresIn:expiresIn,name:user.get('firstName')+'_computer'}).then(_ =>{}).catch(_=>{});
-               return res.json({refreshToken,accessToken,expiresIn:expiresIn});
+               let authHandler = new AuthHandler();
+               authHandler.user = user;
+               let tokenPairWithExpireTime = authHandler.generateAuthTokenPair();
+               RefreshTokens.create({userId:user.get('id'),refreshToken:tokenPairWithExpireTime.refreshToken,expiresIn:(Math.floor(new Date() / 1000)+604800),name:user.get('firstName')+'_computer'}).then(_ =>{}).catch(_=>{});
+               return res.json(tokenPairWithExpireTime);
             });
         })(req, res);
     },
@@ -45,12 +47,12 @@ module.exports = {
             if (!user) {
                 throw new Error('invalid user error');
             }
-            console.log(user.toJSON());
-            const expiresIn = (Math.floor(new Date() / 1000)+300);
-            const accessToken = jwt.sign({sub : user.get('email')}, 'your_jwt_secret',{jwtid : uuidv4(),issuer : 'UGC Agent', expiresIn:expiresIn});
-            const refreshToken = uuidv4();
-            RefreshTokens.update({refreshToken:refreshToken,expiresIn:expiresIn},{where:{userId : user.get('id')}}).then(_ =>{}).catch(_=>{});
-            return res.json({refreshToken,accessToken,expiresIn:expiresIn});
+
+            let authHandler = new AuthHandler();
+            authHandler.user = user;
+            let tokenPairWithExpireTime = authHandler.generateAuthTokenPair();
+            RefreshTokens.update({refreshToken:tokenPairWithExpireTime.refreshToken,expiresIn:(Math.floor(new Date() / 1000)+604800)},{where:{userId : user.get('id'),refreshToken:req.body.refreshToken}}).then(_ =>{}).catch(_=>{});
+            return res.json(tokenPairWithExpireTime);
         }).catch(err => {
             res.status(400);
             res.json({error:err.message});
