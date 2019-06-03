@@ -8,6 +8,10 @@ class UserHandler {
     createUser (userObj) {
         return User.create(userObj);
     }
+
+    getUsers () {
+        return User.findAll();
+    }
 }
 
 module.exports = UserHandler;

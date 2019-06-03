@@ -15,9 +15,7 @@ container.register = function(req, res, next) {
       let userHandler = new UserHandler();
       userHandler.createUser({firstName : firstName, lastName : lastName,email : email, password : hash}).then((user) => {
         res.status(201);
-        let data = user.toJSON();
-        delete data.password;
-        res.json({"message":"Created","data" : data});
+        res.json({"message":"Created","data" : user});
       }).catch((err)=> {
         res.status(500);
         res.json({"error":err.message});
@@ -26,9 +24,20 @@ container.register = function(req, res, next) {
 };
 
 container.list = function(req, res, next) {
-    console.log(req.user);
-    res.status(200);
-    res.json({'message':'respond with a resource'}); 
+    let userHandler = new UserHandler();
+    userHandler.getUsers().then(function(users){
+      if(!users) {
+        res.status(404);
+        res.json({'message':'no users found'}); 
+      } else{
+        res.status(200);
+        res.json({'data':users}); 
+      }
+    }).catch(function(error){
+      res.status(500);
+      res.json({'error':'We rae facing some issues at our end'}); 
+    });
+    
 };
 
 module.exports = container;
