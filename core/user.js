@@ -1,4 +1,5 @@
 const {User} = require('../database/models');
+const bcrypt = require('bcrypt');
 
 class UserHandler {
     constructor() {
@@ -11,6 +12,14 @@ class UserHandler {
 
     getUsers () {
         return User.findAll();
+    }
+
+    getUserById (id) {
+        return User.findByPk(id);
+    }
+
+    generatePassworHash(password,callback) {
+        bcrypt.hash(password, 10, callback);
     }
 }
 

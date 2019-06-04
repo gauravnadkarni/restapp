@@ -6,6 +6,7 @@ const { check } = require('express-validator/check');
 const userModel = require('../database/models').User;
 
 router.get('/', [passport.authenticate('jwt', {session: false})],users.list);
+router.get('/:id([0-9]+)', [passport.authenticate('jwt', {session: false})],users.get);
 router.post('/register',[ check('firstName').not().isEmpty().withMessage('Invalid first name supplied'),
                           check('lastName').not().isEmpty().withMessage('Invalid last name supplied'),
                           check('email').isEmail().withMessage('Invalid email supplied').custom(value => {
