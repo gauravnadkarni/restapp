@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors');//not recommended in production
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -7,9 +8,21 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
+var whitelist = ['http://example1.com', 'http://example2.com']
+var corsOptions =
 
 require('./config/passport');
 var app = express();
+app.use(cors( {
+  origin: function (origin, callback) {
+    let whitelist = ['http://localhost:3000'];
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

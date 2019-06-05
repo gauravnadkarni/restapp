@@ -10,6 +10,7 @@
     "bcrypt": "^3.0.6",
     "bunyan": "^1.8.12",
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-validator": "^5.3.1",
