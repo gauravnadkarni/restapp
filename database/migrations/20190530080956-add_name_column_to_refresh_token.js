@@ -3,15 +3,15 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.addColumn(
-      'refreshtokens',
+      'RefreshTokens',
       'name',
-     Sequelize.STRING
+      Sequelize.STRING
     );
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.removeColumn(
-      'refreshtokens',
+      'RefreshTokens',
       'name'
     );
   }
