@@ -15,7 +15,7 @@ router.post('/register',[ check('firstName').not().isEmpty().withMessage('Invali
                                 return Promise.reject('Email is already in use');
                             });
                           }),
-                          check('password').isLength({min:6,max:10}).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,10}$/, "i").withMessage('Invalid password supplied'),
+                          check('password').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,10}$/, "i").withMessage('Invalid password supplied'),
 ], users.register);
 
 module.exports = router;
