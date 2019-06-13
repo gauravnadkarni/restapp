@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING
   });
   User.associate = function(models) {
-    // associations can be defined here
+    User.belongsTo(models.Roles);
   };
   User.prototype.toJSON =  function () {
     var values = Object.assign({}, this.get());
