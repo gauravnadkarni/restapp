@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator/check');
 const UserHandler = require('../core/user');
+const roleHandler = require('../core/role');
 
 container = {};
 
@@ -13,14 +14,21 @@ container.register = function(req, res, next) {
     let {firstName,lastName,email,password} = req.body;
     let userHandler = new UserHandler();
     userHandler.generatePassworHash(password,function(err,hash){
-      userHandler.createUser({firstName : firstName, lastName : lastName,email : email, password : hash}).then((user) => {
-        res.status(201);
-        res.json({"message":"Created","data" : user});
-      }).catch((err)=> {
+      userHandler.createUser({firstName : firstName, lastName : lastName,email : email, password : hash}).then((user)=>{
+        user.reload({include: [{all: true}]}).then(syncedUser => {
+          res.status(201);
+          res.json({message:'User created successfully',data:syncedUser});
+        }).catch((err)=>{
+          console.log(err.message);
+          res.status(500);
+          res.json({message:'We rae facing some issues at our end'}); 
+        });
+      }).catch((err)=>{
+        console.log(err.message);
         res.status(500);
-        res.json({"error":err.message});
+        res.json({message:'We rae facing some issues at our end'}); 
       });
-    });
+    })
 };
 
 container.list = function(req, res, next) {

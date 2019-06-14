@@ -1,4 +1,5 @@
 const {User} = require('../database/models');
+const roles = require('./role');
 const bcrypt = require('bcrypt');
 
 class UserHandler {
@@ -7,7 +8,14 @@ class UserHandler {
     }
 
     createUser (userObj) {
-        return User.create(userObj);
+        let userPromise = User.create(userObj);
+        let rolePromise = roles.getRoleByName('guest');
+        return Promise.all([userPromise,rolePromise]).then((vector)=>{
+            let user = vector[0];
+            let role = vector[1];
+            user.setRole(role);
+            return user.save();
+        });
     }
 
     getUsers () {
