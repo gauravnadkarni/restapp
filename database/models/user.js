@@ -13,6 +13,17 @@ module.exports = (sequelize, DataTypes) => {
     var values = Object.assign({}, this.get());
     delete values.password;
     return values;
-  }
+  };
+  User.prototype.getUserRoles =  function () {
+    return this.getRole().then((roles)=>{
+      if(!roles)
+        return ["guest"];
+      let rl = []
+      for(let idx in roles) {
+        rl.push(roles[idx].get('name'));
+      }
+      return rl;
+    })
+  };
   return User;
 };

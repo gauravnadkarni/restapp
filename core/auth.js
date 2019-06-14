@@ -23,19 +23,22 @@ class AuthHandler {
         return uuidv4();
     }
 
-    generateAccessToken(returnExpirationTime = false) {
+    async generateAccessToken(returnExpirationTime = false) {
+        let roles = await this._user.getUserRoles();
+        console.log(roles);
         if (returnExpirationTime === true) {
             let expiresIn = this.getExpirationTimeForAccessToken();
-            return { expiresIn: expiresIn, accessToken: jwt.sign({ sub: this._user.get('email') }, config.app.secret, { jwtid: this.generateJwtId(), issuer: config.auth.token_issuer, expiresIn: config.auth.access_token_expiration_time}) };
+            return { expiresIn: expiresIn, accessToken: jwt.sign({ sub: this._user.get('email') , roles : ""}, config.app.secret, { jwtid: this.generateJwtId(), issuer: config.auth.token_issuer, expiresIn: config.auth.access_token_expiration_time}) };
         } else {
-            return jwt.sign({ sub: this._user.get('email') }, config.app.secret, { jwtid: this.generateJwtId(), issuer: config.auth.token_issuer, expiresIn: this.getExpirationTimeForAccessToken() });
+            return jwt.sign({ sub: this._user.get('email'), roles : "" }, config.app.secret, { jwtid: this.generateJwtId(), issuer: config.auth.token_issuer, expiresIn: this.getExpirationTimeForAccessToken() });
         }
     }
 
     generateAuthTokenPair() {
-        let refreshToken = this.generateRefreshToken();
-        let accessToken = this.generateAccessToken(true);
-        return { refreshToken: refreshToken, accessToken: accessToken.accessToken, expiresIn: accessToken.expiresIn };
+        return this.generateAccessToken(true).then((payload)=>{
+            let refreshToken = this.generateRefreshToken();
+            return { refreshToken: refreshToken, accessToken: payload.accessToken, expiresIn: payload.expiresIn };
+        });
     }
 
     getExpirationTimeForAccessToken() {
