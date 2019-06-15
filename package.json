@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
-    "bunyan": "^1.8.12",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -26,7 +25,8 @@
     "save": "^2.4.0",
     "sequelize": "^5.8.6",
     "sequelize-cli": "^5.4.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
