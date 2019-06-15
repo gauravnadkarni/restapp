@@ -6,6 +6,7 @@ const sequelize = require('sequelize');
 const { User } = require('../database/models');
 const { validationResult } = require('express-validator/check');
 const AuthHandler = require('../core/auth');
+const logger = require('../utilities/logger');
 
 module.exports = {
     login: function (req, res, next) {

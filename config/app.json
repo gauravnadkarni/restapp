@@ -1,3 +1,6 @@
 {
-    "secret": "qa3As6oZFfjRLUQJ9lbsu6JLxt3hL6Un"
+    "SECRET": "qa3As6oZFfjRLUQJ9lbsu6JLxt3hL6Un",
+    "ENV": "local",
+    "LOG_FILE": "server.log",
+    "LOG_PATH": "./"
 }

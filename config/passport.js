@@ -34,7 +34,7 @@ passport.use(new LocalStrategy({
 
 passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: config.app.secret
+    secretOrKey: config.app.SECRET
 },
     function (jwtPayload, cb) {
         return cb(null, jwtPayload);
