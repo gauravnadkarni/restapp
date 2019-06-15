@@ -27,14 +27,14 @@ module.exports = {
                 // generate a signed json web token with the contents of user object and return it in the response
                 let authHandler = new AuthHandler();
                 authHandler.user = user;
-                authHandler.generateAuthTokenPair().then((payload)=>{
+                authHandler.generateAuthTokenPair().then((payload) => {
                     res.status(200);
-                    RefreshTokens.create({ userId: user.get('id'), refreshToken: tokenPairWithExpireTime.refreshToken, expiresIn: (Math.floor(new Date() / 1000) + config.auth.refresh_token_expiration_time), name: user.get('firstName') + '_computer' }).then(_ => { }).catch(_ => { }); 
+                    RefreshTokens.create({ userId: user.get('id'), refreshToken: payload.refreshToken, expiresIn: (Math.floor(new Date() / 1000) + config.auth.refresh_token_expiration_time), name: user.get('firstName') + '_computer' }).then(_ => { }).catch(_ => { });
                     return res.json(payload);
-                }).catch((err)=>{
+                }).catch((err) => {
                     console.log(err.message);
                     res.status(500);
-                    res.json({"error":"We are facing some trouble"});
+                    res.json({ "error": "We are facing some trouble" });
                 });
             });
         })(req, res);
@@ -56,13 +56,13 @@ module.exports = {
 
             let authHandler = new AuthHandler();
             authHandler.user = user;
-            authHandler.generateAuthTokenPair().then((payload)=>{
+            authHandler.generateAuthTokenPair().then((payload) => {
                 res.status(200);
-                RefreshTokens.update({ refreshToken: tokenPairWithExpireTime.refreshToken, expiresIn: (Math.floor(new Date() / 1000) + config.auth.refresh_token_expiration_time) }, { where: { userId: user.get('id'), refreshToken: req.body.refreshToken } }).then(_ => { }).catch(_ => { });
+                RefreshTokens.update({ refreshToken: payload.refreshToken, expiresIn: (Math.floor(new Date() / 1000) + config.auth.refresh_token_expiration_time) }, { where: { userId: user.get('id'), refreshToken: req.body.refreshToken } }).then(_ => { }).catch(_ => { });
                 return res.json(payload);
-            }).catch((err)=>{
+            }).catch((err) => {
                 res.status(500);
-                res.json({"error":"We are facing some trouble"});
+                res.json({ "error": "We are facing some trouble" });
             });
         }).catch(err => {
             res.status(400);
