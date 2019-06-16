@@ -14,12 +14,12 @@ module.exports = {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        passport.authenticate('local', { session: false }, (err, user, info) => {
+        passport.authenticate('local', { session: false }, (err, user, info) => 
             if (err || !user) {
-                return res.status(400).json({
-                    message: info.message,
-                });
-            }
+            return res.status(400).json({
+                message: info.message,
+            });
+        }
             req.login(user, { session: false }, (err) => {
                 if (err) {
                     res.send(err);
