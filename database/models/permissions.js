@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING
   }, {});
   Permissions.associate = function(models) {
-    // associations can be defined here
+    Permissions.hasMany(models.Rbac,{ foreignKey: 'permissionId',allowNull: false });
   };
   return Permissions;
 };

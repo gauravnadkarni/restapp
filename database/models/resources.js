@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING
   }, {});
   Resources.associate = function(models) {
-    // associations can be defined here
+    Resources.hasMany(models.Rbac,{ foreignKey: 'resourceId',allowNull: false });
   };
   return Resources;
 };

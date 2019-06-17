@@ -6,7 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     permissionId: DataTypes.INTEGER
   }, {});
   Rbac.associate = function(models) {
-    // associations can be defined here
+    Rbac.belongsTo(models.Roles, { foreignKey: 'roleId', as: 'Role' });
+    Rbac.belongsTo(models.Permissions, { foreignKey: 'permissionId', as: 'Permission' });
+    Rbac.belongsTo(models.Resources, { foreignKey: 'resourceId', as: 'Resource' });
   };
   return Rbac;
 };
