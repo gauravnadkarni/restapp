@@ -21,12 +21,12 @@ container.register = function(req, res, next) {
         }).catch((err)=>{
           console.log(err.message);
           res.status(500);
-          res.json({message:'We rae facing some issues at our end'}); 
+          res.json({message:'We are facing some issues at our end'}); 
         });
       }).catch((err)=>{
         console.log(err.message);
         res.status(500);
-        res.json({message:'We rae facing some issues at our end'}); 
+        res.json({message:'We are facing some issues at our end'}); 
       });
     })
 };
@@ -43,7 +43,7 @@ container.list = function(req, res, next) {
       }
     }).catch(function(error){
       res.status(500);
-      res.json({'error':'We rae facing some issues at our end'}); 
+      res.json({'error':'We are facing some issues at our end'}); 
     });
 };
 
