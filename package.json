@@ -23,7 +23,7 @@
     "pug": "^2.0.3",
     "rbac": "^5.0.3",
     "save": "^2.4.0",
-    "sequelize": "^5.8.6",
+    "sequelize": "^5.15.1",
     "sequelize-cli": "^5.4.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
